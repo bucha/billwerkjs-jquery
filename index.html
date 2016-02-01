@@ -2,13 +2,20 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>IteroJS Hello World - Pactas</title>
-        <script type="text/javascript" src="https://sandbox.pactas.com/selfService/iterojs"></script>  
+        <title>BillwerkJS Hello World - Billwerk</title>
+        <script type="text/javascript" src="https://sandbox.billwerk.com/selfService/billwerkjs"></script>  
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script type="text/javascript">
-            var signupService = new IteroJS.Signup();
-            var paymentService = new IteroJS.Payment({ publicApiKey: "51da9c431d8dd00ae8f69bad" },
-                function () { console.log("iteroJS payment is ready"); },
+
+	    //Please specify your own settings
+	    var publicApiKey = "56af727714a9ff0a38f23dba";
+	    var planVariantId = "56af737e14a9ff0a38f23ddd";
+  	    var componentId = "56af733414a9ff0a38f23dd7"
+	    var paymentMethod = "CreditCard:Paymill";
+
+            var signupService = new BillwerkJS.Signup();
+            var paymentService = new BillwerkJS.Payment({ publicApiKey: publicApiKey },
+                function () { console.log("BillwerkJS payment is ready"); },
                 function () { alert("initialization failed!"); });
 
             $(function () {
@@ -16,10 +23,10 @@
                     // enforce HTML5 validation:
                     ev.target.checkValidity();
 
-                    // Create IteroJS DTOs from user input
+                    // Create BillwerkJS DTOs from user input
                     var cart = {
-                        "planVariantId": "51e39f411d8dd00ccc12f0aa",
-                        "componentSubscriptions": [{ "componentId": "51daa2911d8dd00ae8f69bee", "quantity": 3}]
+                        "planVariantId": planVariantId ,
+                        "componentSubscriptions": [{ "componentId": componentId , "quantity": 3}]
                     };
 
                     var customer = {
@@ -29,7 +36,7 @@
                     };
 
                     var paymentData = {
-                        "bearer": "CreditCard:Paymill",
+                        "bearer": paymentMethod,
                         "cardNumber": $("#cardNumber").val(),
                         "expiryMonth": $("#expMonth").val(),
                         "expiryYear": $("#expYear").val(),
@@ -44,7 +51,7 @@
                     },
                     function (errorData) {
                         console.log(errorData);
-                        alert("something went wrong :(");
+                        alert("something went wrong. See console for details");
                     });
 
                     // make sure the form is not submitted!
@@ -59,35 +66,40 @@
         </style>
     </head>
     <body>
-        <h1>Hello IteroJS!</h1>
+        <h1>Hello BillwerkJS!</h1>
             <form id="form">
+		<div>Name</div>
                 <input type="text" id="firstName" required placeholder="First Name"/><br />
                 <input type="text" id="lastName" required placeholder="Last Name"/><br />
+		<div>Email</div>
                 <input type="email" id="email" required placeholder="E-mail"/><br />
 
-                <input type="text" id="cardHolder" required placeholder="Card Holder's Name"/><br />
+		<div>Card Holder</div>
+                <input type="text" id="cardHolder" value="" required placeholder="Card Holder's Name"/><br />
 
-                <input type="text" id="cardNumber" required placeholder="Card Number" pattern="[0-9]{10,16}" maxlength="16" /><br />
+		<div>Credit Card Number</div>
+                <input type="text" id="cardNumber" value="5169147129584558" required placeholder="Card Number" pattern="[0-9]{10,16}" maxlength="16" /><br />
 
-                Expiry
+                <div>Expiry</div>
                 <select required id="expMonth">
                     <option disabled value="">MM</option>
                     <option value="01">01</option><option value="02">02</option><option value="03">03</option>
                     <option value="04">04</option><option value="05">05</option><option value="06">06</option>
                     <option value="07">07</option><option value="08">08</option><option value="09">09</option>
-                    <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                    <option value="10">10</option><option value="11">11</option><option selected value="12">12</option>
                 </select>
 
                 /
-
+		
                 <select required id="expYear">
                     <option disabled value="">YY</option>
                     <option value="2014">14</option><option value="2015">15</option><option value="2016">16</option>
                     <option value="2017">17</option><option value="2018">18</option><option value="2019">19</option>
-                    <option value="2020">20</option><option value="2021">21</option><option value="2022">22</option>
+                    <option value="2020">20</option><option selected value="2021">21</option><option value="2022">22</option>
                 </select><br />
-                
-                <input type="text" id="cvc" required maxlength="3" pattern="[0-9]{3}" placeholder="CVV / CVC"/><br />
+
+		<div>CVC</div>
+                <input type="text" id="cvc" value="100" required maxlength="3" pattern="[0-9]{3}" placeholder="CVV / CVC"/><br />
                 <button id="signup" type="submit">Signup</button>
             </form> 
     </body>
